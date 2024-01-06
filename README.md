@@ -17,14 +17,14 @@ Ensure you have the following installed:
 1. Navigate to the "server" folder in your terminal.
 2. Run the following command to install server-side dependencies:
    ```bash
-      go mod tidy
+   go mod tidy
    ```
 
 #### Client Setup
 1. Navigate to the "client" folder in your terminal.
 2. Run the following command to install client-side dependencies:
    ```bash
-       go mod tidy
+   go mod tidy
 
 ## Run Project
 
@@ -32,20 +32,20 @@ Ensure you have the following installed:
 1. Go to proto folder in Terminal.
 2. Run the following command to compile proto file
   ```bash
-    protoc --go_out=. --go-grpc_out=. ticket.proto
+  protoc --go_out=. --go-grpc_out=. ticket.proto
   ```
 #### Run server
 1. Go to server folder in your Terminal.
 2. Run the following command.
  ```bash
-    go run main.go
+ go run main.go
   ```
 
 #### Run Client
 1. Go to client folder in your Terminal.
 2. Run the following command.
  ```bash
-    go run main.go
+ go run main.go
   ```
 
 
