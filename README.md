@@ -17,17 +17,17 @@ Ensure you have the following installed:
 1. Navigate to the "server" folder in your terminal.
 2. Run the following command to install server-side dependencies:
    ```bash
-   go mod tidy
+      go mod tidy
    ```
 
 #### Client Setup
 1. Navigate to the "client" folder in your terminal.
 2. Run the following command to install client-side dependencies:
    ```bash
-    go mod tidy
-  ```
+       go mod tidy
+  
 
-### Run Project
+#### Run Project
 
 #### Compile proto file
 1. Go to proto folder in Terminal.
