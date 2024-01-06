@@ -27,7 +27,7 @@ Ensure you have the following installed:
        go mod tidy
   
 
-#### Run Project
+## Run Project
 
 #### Compile proto file
 1. Go to proto folder in Terminal.
