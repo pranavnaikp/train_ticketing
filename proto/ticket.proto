@@ -1,0 +1,92 @@
+syntax = "proto3";
+
+package ticketbooking;
+option go_package = "/protos";
+
+// The request and response messages
+message BookTicketRequest {
+    string first_name = 1;
+    string last_name = 2;
+    string email = 3;
+    int32 seat_number = 4;
+}
+
+message BookTicketResponse {
+    string receipt_id = 1;
+    string message = 2;
+}
+
+message TicketReceipt {
+    string receipt_id = 1;
+    string from = 2;
+    string to = 3;
+    float price = 4;
+    int32 seat_number = 5;
+    string user_name = 6;
+    string user_email = 7;
+}
+
+
+
+message UserDetail {
+    string first_name = 1;
+    string last_name = 2;
+    string email = 3;
+    int32 seat_number = 4;
+}
+
+message UserRequest {
+    string email = 1;
+}
+
+message UserResponse {
+    UserDetail user = 1;
+}
+
+message SectionRequest {
+    string section = 1; // "A" or "B"
+}
+
+message SectionResponse {
+    repeated UserDetail users = 1;
+}
+
+message RemoveUserRequest {
+    string email = 1;
+}
+
+message RemoveUserResponse {
+    string message = 1;
+}
+
+message ModifySeatRequest {
+    string email = 1;
+    int32 new_seat_number = 2;
+}
+
+message ModifySeatResponse {
+    string message = 1;
+}
+
+
+
+
+message ReceiptRequest {
+    string receipt_id = 1;
+}
+
+message ReceiptResponse {
+    TicketReceipt receipt = 1;
+}
+
+
+// The service definition
+service TicketBookingService {
+    rpc BookTicket(BookTicketRequest) returns (BookTicketResponse);
+    rpc GetUserDetail(UserRequest) returns (UserResponse);
+    rpc GetUsersBySection(SectionRequest) returns (SectionResponse);
+    rpc RemoveUser(RemoveUserRequest) returns (RemoveUserResponse);
+    rpc ModifyUserSeat(ModifySeatRequest) returns (ModifySeatResponse);
+    rpc GetReceipt(ReceiptRequest) returns (ReceiptResponse);
+
+}
