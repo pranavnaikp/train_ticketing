@@ -25,7 +25,6 @@ Ensure you have the following installed:
 2. Run the following command to install client-side dependencies:
    ```bash
        go mod tidy
-  
 
 ## Run Project
 
