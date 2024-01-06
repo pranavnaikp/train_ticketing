@@ -1,6 +1,6 @@
 # Train Ticket Booking System
 
-# RESULT
+## RESULT
 ![image](https://github.com/pranavnaikp/train_ticketing/assets/84633869/156eea73-5544-4db9-9c60-b3d2f1174430)
 
 
