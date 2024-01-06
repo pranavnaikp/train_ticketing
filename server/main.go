@@ -22,6 +22,7 @@ type server struct {
 	users    map[string]*pb.UserDetail // Map email to UserDetail
 	seats    map[int32]string          // Map seat number to email
 	receipts map[string]*pb.TicketReceipt
+	
 }
 
 type TicketReceipt struct {
@@ -56,11 +57,26 @@ func (s *server) BookTicket(ctx context.Context, in *pb.BookTicketRequest) (*pb.
 
 	
 	receiptID := fmt.Sprintf("REC-%s-%d", in.Email, in.SeatNumber)
+   
+    s.receipts[receiptID] = &pb.TicketReceipt{
+        ReceiptId:  receiptID,
+        From:       "London",
+        To:         "France",
+        Price:      20.0,
+        SeatNumber: in.SeatNumber,
+        UserName:   in.FirstName + " " + in.LastName,
+        UserEmail:  in.Email,
+    }
 
-	return &pb.BookTicketResponse{
-		ReceiptId: receiptID,
-		Message:   "Ticket booked successfully",
-	}, nil
+    return &pb.BookTicketResponse{
+        ReceiptId: receiptID,
+        Message:   "Ticket booked successfully",
+        FullName:  in.FirstName + " " + in.LastName,
+        Email:     in.Email,
+        From:      "London",
+        To:        "France",
+        Price:     20.0,
+    }, nil
 }
 
 func (s *server) GetUserDetail(ctx context.Context, in *pb.UserRequest) (*pb.UserResponse, error) {
@@ -135,40 +151,43 @@ func (s *server) ModifyUserSeat(ctx context.Context, in *pb.ModifySeatRequest) (
 }
 
 func (s *server) GetReceipt(ctx context.Context, req *pb.ReceiptRequest) (*pb.ReceiptResponse, error) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
+    s.mu.Lock()
+    defer s.mu.Unlock()
 
-	receipt, exists := s.receipts[req.ReceiptId]
-	if !exists {
-		return nil, fmt.Errorf("receipt with ID %s not found", req.ReceiptId)
-	}
+    // Look for the receipt with the provided ID
+    receipt, exists := s.receipts[req.ReceiptId]
+    if !exists {
+        return nil, fmt.Errorf("receipt with ID %s not found", req.ReceiptId)
+    }
 
-	// Convert your internal receipt structure to the protobuf structure if they are different
-	pbReceipt := &pb.TicketReceipt{
-		ReceiptId:  receipt.ReceiptId,
-		From:       receipt.From,
-		To:         receipt.To,
-		Price:      receipt.Price,
-		SeatNumber: receipt.SeatNumber,
-		UserName:   receipt.UserName,
-		UserEmail:  receipt.UserEmail,
-	}
+    // Convert the internal receipt struct to the protobuf struct
+    pbReceipt := &pb.TicketReceipt{
+        ReceiptId:  receipt.ReceiptId,
+        From:       receipt.From,
+        To:         receipt.To,
+        Price:      receipt.Price,
+        SeatNumber: receipt.SeatNumber,
+        UserName:   receipt.UserName,
+        UserEmail:  receipt.UserEmail,
+    }
 
-	return &pb.ReceiptResponse{Receipt: pbReceipt}, nil
+    return &pb.ReceiptResponse{Receipt: pbReceipt}, nil
 }
 
+
 func main() {
-	lis, err := net.Listen("tcp", port)
-	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
-	}
-	s := grpc.NewServer()
-	pb.RegisterTicketBookingServiceServer(s, &server{
-		users: make(map[string]*pb.UserDetail),
-		seats: make(map[int32]string),
-	})
-	log.Printf("server listening at %v", lis.Addr())
-	if err := s.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
-	}
+    lis, err := net.Listen("tcp", port)
+    if err != nil {
+        log.Fatalf("failed to listen: %v", err)
+    }
+    s := grpc.NewServer()
+    pb.RegisterTicketBookingServiceServer(s, &server{
+        users:    make(map[string]*pb.UserDetail),
+        seats:    make(map[int32]string),
+        receipts: make(map[string]*pb.TicketReceipt), 
+    })
+    log.Printf("server listening at %v", lis.Addr())
+    if err := s.Serve(lis); err != nil {
+        log.Fatalf("failed to serve: %v", err)
+    }
 }
